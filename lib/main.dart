@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sneakpeak_mapbox_poc/activity_map_helper.dart';
 import 'package:sneakpeak_mapbox_poc/draw/drawing_painter.dart';
+import 'package:sneakpeak_mapbox_poc/ripple_animation.dart';
 import 'package:sneakpeak_mapbox_poc/static_data.dart';
 
 import 'draw/drawing_points.dart';
@@ -47,7 +48,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final latlng = LatLng(23.402765, 80.316010);
   final latlng2 = LatLng(23.49265, 80.316010);
+  final rippleLatlng = LatLng(24.49265, 80.316010);
   final densityLoc1 = LatLng(23.412065, 80.316010);
+
   final densityLoc2 = LatLng(23.422265, 80.316010);
   bool isDrawing = false;
 
@@ -86,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
         isDrawing = !isDrawing;
+       // mapController.move(rippleLatlng, 8);
         setState(() {});
       }),
       body: isLoading
@@ -172,7 +176,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             onMapEvent: (event) {
                               // Use this if you don't want to listen to stream.
                             },
-
                             interactiveFlags: InteractiveFlag.pinchZoom |
                                 InteractiveFlag.drag,
                             onMapReady: () {
@@ -212,6 +215,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                     points: points,
                                     strokeWidth: 4,
                                     color: Colors.purple),
+                              ],
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                    point: rippleLatlng,
+                                    builder: (_) => RippleAnimation(
+                                          child:  SvgPicture.asset(
+                                            'assets/coffee.svg',
+                                          ),
+                                          repeat: true,
+                                      color: Color(0xff6DFFC1),
+                                        ))
                               ],
                             ),
 
